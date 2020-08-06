@@ -1,22 +1,22 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 require('dotenv/config')
+
+app.use(bodyParser.json());
 
 //Importing Routes
 const postsRoutes = require('./routes/posts');
 app.use('/posts', postsRoutes);
 
-//Connect to DB
-const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.DB_CONNECTION;
-const client = new MongoClient(uri, { useNewUrlParser: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  // console.log(err)
-  client.close();
+//routes
+app.get('/', (req, res) => {
+  res.send('We are on Home!');
 });
 
+//Connect to DB
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('Connected!'));
 
 //Listening
 app.listen(3000);
